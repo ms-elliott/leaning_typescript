@@ -1,0 +1,55 @@
+[014. TypeScriptの型 JavaScriptの型]
+
+・TypeScript
+tsc(型検査)に通る様に記述する必要がある
+JSにもともとある型＋α の多くの種類が存在する
+
+・JavaScript
+JavaScriptエンジン(型検査)を行ってからJSを実行している
+
+２つの型検査は全く別物
+
+[015. boolean, number, string]
+lesson2-015.ts
+
+[016. 型注釈　型推論]
+let hasValue = ture;
+TypeScriptは、":boolean"を省略しても右辺から型を推測して定義する。基本的には型推論を使用する。
+型推論ができない場合は、型を明示的に指定する。(型注釈)
+let hello;  // 代入せずに宣言のみする場合等。この時、型は"any"となる。
+
+[017. オブジェクトの型]
+lesson2-017.ts
+
+[018. Array型]
+lesson2-018.ts
+
+[019. Tuple型　決まった内容の配列]
+lesson2-019.ts
+
+[020. Enum 特定のまとまったグループのみを受け入れる列挙型]
+lesson2-020.ts
+
+[021. any型]
+anyを使用すると、TypeScriptは型チェックを行わない。
+例) string型のnameに対して、any型のanythingを代入しても、エラーにならない。
+-> TypeScriptの利点である型指定が意味をなさなくなる為、できるだけanyは使用しない。
+
+[022. Union型　複数の型を受け入れる]
+lesson2-022.ts
+
+[023. Literal型　特定の値のみを取り扱う]
+lesson2-023.ts
+
+[024. typeエイリアス　複雑な型を変数のように扱う]
+typeエイリアス・・・型の別名(変数)
+lesson2-024.ts
+
+[025. 関数に型をつける]
+[026. 関数の戻り値にvoid型を使う]
+lesson2-025-026.ts
+
+
+
+
+

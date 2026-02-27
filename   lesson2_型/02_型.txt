@@ -49,7 +49,25 @@ lesson2-024.ts
 [026. 関数の戻り値にvoid型を使う]
 lesson2-025-026.ts
 
+[027. undefined と null]
+undefinedと同様にnull型にはnullしか入れられない。
 
+[028. 関数型　特定の関数のみを代入可能]
+lesson2-028.ts
 
+[029. callback関数の型]
+lesson2-029.ts
 
+[030. unknown型　柔軟でanyよりも厳しい型を定義する]
+lesson2-030.ts
 
+[031. satisfies演算子 自由に型のチェックを行う]
+値 satisfies 型
+28 satisfies number
+型に代入可能な値でない場合は、エラーを吐く
+
+const age = 28 satisfier number のように、変数や定数の初期値で使用することも可能
+この場合は型推論を機能させつつ、型注釈同様に型のチェックをしている
+
+[032. never型　起こり得ない値の型]
+lesson2-032.ts

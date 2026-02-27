@@ -1,0 +1,115 @@
+[035. watchモード　保存時に自動的にTS->JSにコンパイルする]
+・ターミナルでコンパイル時にオプションを指定し、watchモードにする
+    tsc index.ts -w もしくは --watch
+・コンパイル後にファイルを修正し、保存すると自動的にJSにコンパイルされる
+・watchモードを停止する場合は、Cntl + C
+
+[036. 全てのファイルを一括コンパイルする方法]
+・コマンドを実行し、tsconfig.json をルートに配置する
+    tsc --init
+・上記ファイルがあれば、コマンドで"tsc"と打つだけで、全てのTSファイルがコンパイルされる
+    (tsconfig.json内のデフォルトの設定が全てのファイルをコンパイルする設定となっている)
+
+・watchモードを使用することも可能
+    tsc -w
+
+・コンパイルしたjsファイルをブラウザでそのまま実行する場合にエラーになったら、下記で対応
+    ①tsconfig.json内のmoduleを、"nodenext" -> "esnext" に変更
+    ②「"moduleDetection": "force"」をコメントアウト
+
+[037. include exclude file コンパイルするファイルを選択する]
+tsconfig.jsonファイルにプロパティを追加する
+
+・特定のファイルのみをコンパイルしたい
+"include": {
+    "index.ts"
+},
+
+・特定のファイルをコンパイルから除外したい
+"exclude": {
+    "file1.ts",
+    "*.spec.ts",            // ワイルドカードを使用して拡張子を指定することも可能
+    "folder1/file2.ts",     // ルートディレクトリから辿れるファイルのみ適用される。フォルダ配下に設置したファイルはパスを記述する
+    "**/file3.ts",          // どのディレクトリ内にあっても、file3.tsファイルをコンパイルしない
+    "node_modules"          // excludeを記述する場合は明示的にnode_moduleも記述する必要がある。デフォルトでは除外するが、記述した場合はその内容で上書きされてしまう為
+},
+
+・excludeに指定されたファイルでもコンパイルすることが可能
+"files": {
+    "tmp/compiler.ts"
+}
+・includeとexcludeを併記した場合は、includeの内容からexcludeの内容を引いたものがコンパイルされる
+
+[038. target 特定のバージョンのJSに変換]
+tsconfig.jsonファイルのtargetプロパティでバージョンを指定する
+デフォルトではES5
+
+[039. lib TypeScriptが用意している型の定義を追加する]
+tsconfig.jsonファイルのlibプロパティで型の定義を追加する
+デフォルトではコメントアウトされ、targetプロパティによって型の定義が変更される
+"lib": [
+    "ES6",     // ES6に関する全ての型の定義が利用できる様になる
+    "DOM",
+    "DOM.Iterable",
+    "ScriptHost"
+],
+上記はtargetがES6の場合のデフォルト設定値と同じ
+
+[040. allowjs, checkjs, jsx, declaration, declarationMap]
+tsconfig.jsonファイル
+・JavaScriptファイルもコンパイル対象に含む
+    "allowjs": true,
+
+・JavaScrptファイルもTypeScriptファイル同様にエラーをチェックする(allowjsと一緒に使用)
+    "checkJs": true,
+
+・React.jsに対して使う (今回のレッスンでは省略)
+    "jsx": "preserve",
+
+・型宣言ファイルをコンパイル時に作成する　(拡張子は.d.ts。ライブラリを作成し共有したい場合に使用する)
+    "declaration": true,
+    "declarationMap": ture,
+
+[041. SourceMap ブラウザでTypeScriptを操作する]
+・下記コマンドを実行し、ブラウザの検証->SourceでJSコードを確認したい場合
+    open index.html
+
+・tsconfig.jsonファイルで下記をコメントアウト
+    "SourceMap": true,
+・コマンドで"tsc"を実行
+・XXXX.js.mapファイルが生成される
+    -> JavaScriptからTypeScriptを作り出す為のファイル
+・ブラウザを再読み込みし、検証->Sourceタグを開くと、TypeScriptのファイルが追加されている。
+    ブレイクポイントを張って実行することも可能
+
+[042. outDir, rootDir, removeComments, noEmit, downlevelIteration]
+・TypeScript->JavaScriptにコンパイルされる際に出力されるディレクトリを指定する
+    "outDir": "./dist",
+    distフォルダが生成され、配下にJsファイルが格納される
+・TypeScript->JavaScriptにコンパイルされる際に参照されるディレクトリを指定する
+    "rootDir": "./src"
+    この際に全てのTypeScriptファイルがrootdirで指定したフォルダ配下に含まれること。含まれていない場合はエラーを吐く。
+・コメントを削除する
+    "removeComments": true,
+・何も出力しない(＝正しくコードが書けているかエラーのみチェックする。コンパイルでファイル等を出力しない。)
+    "noEmit": true,
+・絵文字等を含む文字列をループする際に正しく動かない場合があれば、正しく動く様にする。
+　記述が増えてしまう為、デフォルトではコメントアウトされている
+    "downlevelIteration": true;
+
+[043. noEmitOnError]
+・エラーが起きた場合にJavaScriptにコンパイルしない
+    "noEmitOnError": true
+
+[044. Strict]
+    "strict": true,
+    ↑同義↓ (strictをtrueにすると、下の７項目全てtrueにしたことと同じ)
+    "noImplicitAny": true,                  // 暗黙的なanyはエラーを吐く。(明示的なanyはエラーにならない)
+    "strictNullChecks": true,               // 一般的な型注釈定数/変数にnull/undefinedを代入してもエラーは起きないが、trueにすることでnull/undefined代入でエラーを吐く。
+    "strictFunctionTypes": true,            // trueにすると、関数の戻り値がstring | nullの場合で.UpperCase()をするとエラーとなる。型のパターンを厳しくチェックする。
+    "strictBindCallApply": true,            // 関数.call(thisのオブジェクト, 関数パラメータ)と記述すると関数内のthisが指すものを明示的に記述できる。trueにすることで関数のパラメータもチェックしエラーを吐く。
+    "strictPropertyInitialization": true,   // クラスを使用するときに使う
+    "noImplicitThis": true,                 // thisが何を指すか分からない場合にエラーを吐く
+    "useUnkownInCatchVariables": true,      // try~catchのcatchで受け取るデータをany->unknownに変更する
+
+

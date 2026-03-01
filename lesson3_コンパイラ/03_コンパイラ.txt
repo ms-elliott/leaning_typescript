@@ -102,14 +102,32 @@ tsconfig.jsonファイル
     "noEmitOnError": true
 
 [044. Strict]
-    "strict": true,
-    ↑同義↓ (strictをtrueにすると、下の７項目全てtrueにしたことと同じ)
-    "noImplicitAny": true,                  // 暗黙的なanyはエラーを吐く。(明示的なanyはエラーにならない)
-    "strictNullChecks": true,               // 一般的な型注釈定数/変数にnull/undefinedを代入してもエラーは起きないが、trueにすることでnull/undefined代入でエラーを吐く。
-    "strictFunctionTypes": true,            // trueにすると、関数の戻り値がstring | nullの場合で.UpperCase()をするとエラーとなる。型のパターンを厳しくチェックする。
-    "strictBindCallApply": true,            // 関数.call(thisのオブジェクト, 関数パラメータ)と記述すると関数内のthisが指すものを明示的に記述できる。trueにすることで関数のパラメータもチェックしエラーを吐く。
-    "strictPropertyInitialization": true,   // クラスを使用するときに使う
-    "noImplicitThis": true,                 // thisが何を指すか分からない場合にエラーを吐く
-    "useUnkownInCatchVariables": true,      // try~catchのcatchで受け取るデータをany->unknownに変更する
+"strict": true,
+↑同義↓ (strictをtrueにすると、下の７項目全てtrueにしたことと同じ)
+"noImplicitAny": true,                  // 暗黙的なanyはエラーを吐く。(明示的なanyはエラーにならない)
+"strictNullChecks": true,               // 一般的な型注釈定数/変数にnull/undefinedを代入してもエラーは起きないが、trueにすることでnull/undefined代入でエラーを吐く。
+"strictFunctionTypes": true,            // trueにすると、関数の戻り値がstring | nullの場合で.UpperCase()をするとエラーとなる。型のパターンを厳しくチェックする。
+"strictBindCallApply": true,            // 関数.call(thisのオブジェクト, 関数パラメータ)と記述すると関数内のthisが指すものを明示的に記述できる。trueにすることで関数のパラメータもチェックしエラーを吐く。
+"strictPropertyInitialization": true,   // クラスを使用するときに使う
+"noImplicitThis": true,                 // thisが何を指すか分からない場合にエラーを吐く
+"useUnkownInCatchVariables": true,      // try~catchのcatchで受け取るデータをany->unknownに変更する
 
+[045. 綺麗なコードを書くための設定]
+・使ってないローカル変数を許可しない
+    "noUnusedLocals": true,
+・使ってないパラメータを許可しない
+    "noUnusedParameters": true,
+・暗黙的なreturnを許可しない(if文などで戻り値が設定されていないパターンを許可しない)
+    "noImplicitReturns": true,
+・Switch文で使用できる
+    "noFallthroughCasesInSwitch": true,
 
+[046. 045の追加]
+・ファイルの大文字と小文字を必ず区別する
+    "forceConsistentCasingFileNames": true,
+・TypeScriptのファイルを１つの独立したファイルとして見た場合に、解釈できないコードがあればエラーにする(tsc以外のコンパイル時に使用する)
+    "isolateModules": true,
+・他の(サードパーティ製)ライブラリの型チェックをしないようにする
+    "skipLibCheck": true,
+・別の設定ファイルに記述された内容を全て継承する
+    "extends": "./tsconfig.base.json",

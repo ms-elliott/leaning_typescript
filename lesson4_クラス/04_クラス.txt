@@ -18,3 +18,25 @@
 [055. 初期化の処理を省略する方法]
     lesson4_055.ts
 
+[056. readonly修飾詞 書き換えできない様にする方法]
+    lesson4_056.ts
+
+[057. extends 他のクラスの機能を継承する方法]
+    lesson4_057-058.ts
+
+[058. protected修飾詞　継承先までアクセスできる範囲を広げる]
+    lesson4_057-058.ts
+
+[059. ゲッターとセッターの作り方]
+    lesson4_059.ts
+
+[060. static インスタンスを作らずにクラスを使う]
+    lesson4_060.ts
+
+[061. abstructクラス　継承のみに使えるクラス]
+    lesson4_061.ts
+
+[062. privateをconstructorに付けて、シングルトンパターンを実装する]
+    lesson4_062.ts
+
+

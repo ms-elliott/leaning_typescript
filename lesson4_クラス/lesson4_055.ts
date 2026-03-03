@@ -7,7 +7,7 @@ class Person2 {
     }
 
     // クラスを型として使う
-    greeting2(this: Person1) {
+    greeting2(this: Person2) {
         console.log('Hello! My name is ${this.name}. I am ${this.age} years old.');
     }
 }
@@ -15,4 +15,4 @@ class Person2 {
 const quill3 = new Person2('Quill', 38);
 
 
-quill2.greeting2();
+quill3.greeting2();

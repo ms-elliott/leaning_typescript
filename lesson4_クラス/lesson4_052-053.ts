@@ -1,12 +1,18 @@
-class Person1 {
+class Person2 {
     name: string;
 
     constructor (initName: string) {
         this.name = initName;
     }
 
-    greeting() {
+    // thisの型を定義する
+    greeting(this: { name: string }) {
         console.log('My name is ${this.name}');
+    }
+
+    // クラスを型として使う
+    greeting2(this: Person1) {
+        console.log('Hello! My name is ${this.name}');
     }
 }
 

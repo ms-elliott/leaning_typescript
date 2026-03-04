@@ -1,0 +1,21 @@
+[065. interfaceはこう使う]
+lesson5_065.ts
+
+[066. メソッドをオブジェクトの型に指定する]
+lesson5_066.ts
+
+[067. implements クラスに対してinterfaceの条件を適応させる]
+lesson5_067.ts
+
+[068. 構造的部分型　structual subtyping]
+構造的
+    同じ構造をした型であれば区別はしない
+    例: type Human = { name: string, age:number }
+        type Person = { name: string, age:number }
+部分型
+    取れる値の範囲がより広い型への代入は可能
+        string | number にstring を代入する
+
+[069.readonly修飾詞をinterfaceに使って、読みだけのプロパティを作る]
+lesson5_069.ts
+

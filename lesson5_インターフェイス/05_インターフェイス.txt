@@ -19,3 +19,29 @@ lesson5_067.ts
 [069.readonly修飾詞をinterfaceに使って、読みだけのプロパティを作る]
 lesson5_069.ts
 
+[070. extends interfaceを継承する]
+lesson5_070.ts
+
+[071. コールシグネチャ、コンストラクタシグネチャ　interfaceで関数の型を表現する]
+lesson5_071.ts
+
+[072. ?を使ってオプショナルプロパティやオプショナルパラメータ、デフォルト引数を使用する]
+lesson5_072.ts
+
+[073. オブジェクトのキー]
+const data = 'prop'
+const obj: {
+    'user-id': string,
+    1: number,
+    [data]: string,
+    bar: string;
+} = {
+    'user-id': 'foo',
+    1: 1,
+    [data]: 'hello',
+    bar: 'bar
+}
+
+プロパティへのアクセスの仕方
+① obj.user-id
+② obj['user-id']

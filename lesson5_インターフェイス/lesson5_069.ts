@@ -21,4 +21,4 @@ const tmpDeveloper = {
     }
 }
 const user: Human3 = tmpDeveloper;
-let developer = new Developer('Quill', 38, 3);
+let developer = new Developer1('Quill', 38, 3);

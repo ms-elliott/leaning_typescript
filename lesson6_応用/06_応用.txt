@@ -1,2 +1,97 @@
 [076. &を用いてインターセクション型を定義する]
     lesson6_076.ts
+
+[077. narrowing 3つのtype guardで型を絞り込む]
+    // TypeScriptは文脈を理解して、自動的に型を絞り込む
+    let foo: string | number
+    foo = 'hello'
+    function myFunc(x: string | null) {
+        // 条件式等で特定の型のみに絞り込んでいることを、type guardと呼ぶ
+        if(x === null) {
+            x   // <- nullしか入らないので、自動的にx: nullとなる
+        } else {
+            x   // <- nullは入らないので自動的にx: stringとなる
+        }
+    }
+
+    // returnの場合も同様で、自動的に型を絞り込む
+    function myFunc(x: string | null) {
+        if(x === null) {
+            return x   // x: null
+        }
+        return x   // x: string
+    }
+
+    3つのtype guard
+    ①typeof演算子
+    ②in演算子
+    ③instanceof演算子
+    lesson6_077.ts
+
+[078. タグ付きunion 型を絞り込む]
+    lesson6_078.ts
+
+[079. as(型アサーション)　手動で型を上書きする]
+    ※HTMLファイルにinputタグのついたコンソールがあるとする
+    // 型アサーションをしないと、型はHTMLInputElement or null となり、.valueでエラーになる
+    const input = document.getElementById('input');
+    input.value = 'initial input value';
+
+    // 型アサーションの仕方２パターン
+    const input = <HTMLInputElement>document.getElementById('input')
+    const input = document.getElementById('input') as HTMLInputElement;
+
+    // .value上書きの別記法   ()で囲む
+    (document.getElementById('input') as HTMLInputElement).value = 'initial input value';
+
+[080. !(Non-null assertion operator) nullではないと言い切る]
+    // 末尾に「!」を付ける
+    // 基本的にはif文で条件分岐させる方がベターなので、あまり使わない
+    const input = document.getElementById('input')!;
+
+[081. noUncheckedIndexAccess インデックスシグネチャを使用して柔軟なオブジェクトを作る]
+    lesson6_081.ts
+
+[082. 関数のオーバーロード]
+    lesson6_082.ts
+
+[083. Optional Chaining]
+    lesson6_083-084.ts
+
+[084. Nullish Coalescsing  null型演算子]
+    lesson6_083-084.ts
+
+[085. LookUp型(インデックスアクセス型)　プロパティの型を取得する]
+    lesson6_085.ts
+
+[086. 型の互換性]
+    lesson6_086.ts
+
+[087. TypeScriptの型安全性　JavaScriptの柔軟性]
+    TypeScriptでも、Number + Stringを実行すると、String型になりエラーとならない。
+    TypeScriptはガチガチに型で縛ってるわけではない。
+    詳しく知りたい場合は公式ドキュメントを確認する。
+
+[088. オーバーロードを型で表現する]
+    lesson6_088.ts
+
+[089. 関数型のインターセクションはオーバーロードになる]
+    lesson6_089.ts
+
+[090. 関数型のユニオン型は、パラメータがインターセクション型、戻り値がユニオン型になる]
+    lesson6_090.ts
+
+[091. labeled tuple  レストパラメータに配列やタプルを指定する]
+    lesson6_091−092.ts
+
+[092. 配列とタプルにreadonly修飾詞をつける]
+    lesson6_091−092.ts
+
+[093. constアサーション]
+    lesson6_093.ts
+
+[094. 型の中でtypeofを使う]
+    lesson6_094.ts
+
+[095. シンボル型]
+    lesson6_095.ts

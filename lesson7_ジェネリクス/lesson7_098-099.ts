@@ -14,3 +14,10 @@ function copy1<T>(value: any) {
 console.log(copy1<string>('hello'));
 
 // 関数宣言以外(アロー関数など)でもジェネリクスを使用することができる
+
+
+// 型パラメータにextendsで制約をつける
+function copy2<T extends { name: string }>(value: any) {
+    let user: T;
+    return value;
+}

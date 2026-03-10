@@ -1,0 +1,5 @@
+[110. デコレータ　classに関数を適応する]
+    デコレータ・・・classを受け取ってデコレーションする
+    将来的にJSに組み込まれる機能
+        tsconfig.jsonの　"experimentalDecorators":trueのコメントアウトを外す
+

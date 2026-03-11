@@ -12,7 +12,7 @@
 //     }
 // }
 
-
+// デコレータを返す関数　・・・デコレータファクトリー
 function Logging(message: string) {
     return function (constructor: Function) {
         console.log(message);
@@ -20,6 +20,7 @@ function Logging(message: string) {
     }
 }
 
+// クラスに対してデコレータを適用させる
 @Logging('Logging User')    // クラス定義時に実行される
 class User {
     name = 'Quill';

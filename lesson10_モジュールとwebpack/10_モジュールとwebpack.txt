@@ -1,0 +1,45 @@
+通信を速くする為に、最終的にファイルを１つにくっつけることがよくあり、その為のツールを「バンドラー」と呼ぶ。
+バンドラーの中でも有名なwebpackというツールとtypescriptを一緒に使う方法を学ぶ。
+
+[135. scriptタグを並べてファイルを分割する]
+    ・クラスなどでファイルを分割する
+    ・index.html等のheadタグ内に各ファイルを読み込むようにscriptタグを記述する
+        <script src="dist/score.js" defer></script>
+    ※tsconfig.jsonで  "module":"nodeNext"になっている場合は、"module":"esnext"に変更。
+    　  modeleDetection: "true"がある場合はコメントアウトする。
+
+    -> scriptタグを読み込む(記述する)順番を間違えたりでエラーが起きやすい(古いやり方)
+        最近はES6モジュールを使用してデメリットを解決できるようになった
+
+[136. 最近はES6モジュールを使用してデメリットを解決できるようになった]
+    ・他のファイルでも使用したいコンポーネント(class, interface, etc.)の先頭に「export」と記述する。
+        export class Foods implements Foodsable { ... }
+    ・使いたいコンポーネントをファイルの頭でimportすることで使用できる様になる。
+        import { exportしたコンポーネント名 } from "ファイルパス";
+        import { Foods } from "./foods";    // webpack等を使用しない場合は、ファイルパスに".js"の拡張子が必要。
+    ・index.htmlのhead内でscriptタグを記述する
+        <script src="dist/main.js" type="module"></script>
+    ・tsconfig.json内の"compileOptions"で"module": "ES6"となっていることを確認
+        import/exportはtargetではなくmodule
+        ES5まではJSにファイルを分割する機能がなかった為、サードパーティによる機能が乱立。
+
+[137. ローカルサーバを用意して、ESモジュールをブラウザで利用する]
+    ・サードパーティ製のパッケージ(SERVE)を利用し、ローカルサーバを立てる
+    ・SERVEをインストールする
+        ターミナルで"npm install -g serve"を実行する
+    ・サーバーを立てる
+        ターミナルで"serve"＂を実行する
+
+[138. noUncheckedSideEffectImports  ５つのimportの書き方　3つのexportの書き方]
+    ・同一ファイルが複数ファイルでimportされていても、実行されるのは１度のみ
+    ・「import "ファイルパス"」　と記述することで、ファイルが実行されるだけで読み込まれることはない
+        この際にファイルパスが間違っていてもデフォルトではエラーを吐かないので、エラーとなるように下記を設定する
+            tsconfig.json > compileOptions内に、「"noUncheckedSideEffectImports": true,」を追記
+   ・importに別名を付ける
+        import { Foodsable as FoodListable } from "./interface";
+        import * as Interfaces from "./interface";        // 全て取得する場合は 「*」
+    ・import時に{}で記述する手間を省くデフォルト設定・・・デフォルトインポート/デフォルトエクスポート　それ以外の方法は名前付きインポート/エクスポート
+        export default class Foods implements Foodsable {...}   // export defaultは1つのファイルで１度しか使用できない
+        import 好きな別名　from "./foods.js"
+
+[139. ]

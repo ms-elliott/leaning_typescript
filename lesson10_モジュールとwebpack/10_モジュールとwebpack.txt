@@ -28,7 +28,7 @@
     ・SERVEをインストールする
         ターミナルで"npm install -g serve"を実行する
     ・サーバーを立てる
-        ターミナルで"serve"＂を実行する
+        ターミナルで"serve"を実行する
 
 [138. noUncheckedSideEffectImports  ５つのimportの書き方　3つのexportの書き方]
     ・同一ファイルが複数ファイルでimportされていても、実行されるのは１度のみ
@@ -42,4 +42,157 @@
         export default class Foods implements Foodsable {...}   // export defaultは1つのファイルで１度しか使用できない
         import 好きな別名　from "./foods.js"
 
-[139. ]
+[139. type-only imports/exports varbatimModuleSyntax]
+    ・型だけをimportしている場合
+        import { Scoreable } from "./interfaces.js";
+        import type { Scoreable } from "./interfaces.js";   // typeと記述することで型情報を参照しているだけと明示することができる
+    ・型だけを参照している場合にtypeを付けないとエラーとする設定
+        tsconfig.json > conpileOptions内に、「"verbatimModuleSyntax": true,」と記述する
+
+[140. Script と　Module moduleDetection]
+    ・JavaScriptには、ScriptとModuleという２種類のモードが存在する。
+        ・Scriptで定義されたデータは他のファイルでも使えるが、Moduleは使えない。
+        ・import/exportはModule内でのみ使用可能。
+        ・HTMLのScriptタグでtype="module"と指定しているソースはmoduleとして扱われる。
+    ・TypeScriptにも同様の概念があり、自動で判断している。
+        ・ファイルにimport/exportがなければScript、あればModuleとして扱う。
+        ・tsconfig.json > compileOptions内に、「"moduleDetection": true,」と記述すると、強制的に全てのtsファイルをモジュールとして扱うようになる。
+
+[141. webpackを使う理由]
+    webpack　・・・色々なファイルをギュッとまとめる(bandle)　＝　こういったツールを「バンドラー」と呼ぶ
+    ・モダンでないブラウザでモジュールを使う
+    ・http通信を一括で行う為(速度)
+    ・コードの最適化の為
+    ・プラグインの追加
+    ・いろんな種類のファイルを扱う為
+    ・HMR付きのローカルサーバーを使う為     (※ホットモジュールリプレースメント・・・何かコードに変更を加えて保存すると、ブラウザが自動的にリロードされる)
+    その他のbandler
+        rollup.js ・・・より簡単にセットアップ可能
+        esbuild・・・高速
+        Rolldown,Rsbuild・・・さらに高速
+        Vite・・・効率的に環境を整える
+
+[142. webpackをインストールしてセットアップする]
+    ・ターミナルで下記を実行し、package.jsonを作成する
+        npm init -y
+    ・webpack、webpack-cliをインストールする　  (--save-dev　開発用)
+        npm install --save-dev webpack webpack-cli
+    ・package.jsonを開き、"scripts"内に記述する
+        "scripts" {
+            "test": "echo \"Error: no test specified\" && exit ....",
+            "build": "webpack"
+        },
+    ・上記まで設定することで、ターミナルで「npm run build」と入力すると、webpackが実行されるようになる
+    ・webpack.config.jsという名前のファイルを作成し、webpack専用のconfigファイルを設定する
+        const path = require('path');
+
+        module.exports = {
+            entry: './dist/main.js',
+            output: {
+                filename: '[contenthash]bundle.js',     // containthash・・・ファイルの内容をハッシュ値で持つ。変更があればハッシュ値に反映されキャッシュから読み込まずリロードする。
+                path: path.resolve(__dirname + 'dist')         // 絶対パスで記述する
+            }
+        }
+    ・ターミナルで「npm run build」を実行すると、コードを1行に集約したbundle.jsが生成される。
+    ・htmlファイルでbundle.jsを読み込む
+        <script src="dist/bundle.js" defer></script>    // defer必須
+
+[144. source mapをwebpackで作成する]
+    module.exports = {
+        entry: './dist/main.js',
+        output: {
+            ・・・
+        },
+        devtool: 'inline-source-map'    // inline~ を指定することによって、新しくファイルを作成せずにコメントでsource-mapを作成する
+    }
+
+[145. ts-loaderを使用して、TypeScriptを直接webpackで扱う方法・・・moduleResolution]
+    ts-loaderを使用しすると、ts->jsにコンパイル->bandle.jsを作成という順序を踏まなくても、ts->bandle.jsを作成できる
+        module.exports = {
+            entry: './src/food-app/main.js',
+            output: {
+                ・・・
+            },
+            devtool: 'inline-source-map',
+            module: {
+                rules: [{
+                    test: /\.ts$/,         // 何に対してか指定する 　全てのtsファイル
+                    use: 'ts-loader',
+                    exclude: /node_modules/
+                }]
+            },
+            resolve: {
+                extensions: ['.ts', '.js']  // 拡張子がなかった場合に左から順に補完する
+            }
+        }
+    ・各moduleのimport文の.jsを削除する
+        import { Foods } from "./foods";
+    ・＋α：　拡張子がなかった場合の拡張子の設定
+        tsconfig.json > compileOptions内の "moduleResolution" : "nodeNext"      //   "Bundler"を指定すると、バンドラーと同じルールでファイルを探す
+
+[146. webpack-dev-serverを使用して、bundleをローカルサーバから提供する]
+    ・ターミナルで下記を実行する。
+        npm install --save-dev webpack-dev-server
+    ・package.jsonを開き、"scripts"内に記述する
+        "scripts" {
+            "test": "echo \"Error: no test specified\" && exit ....",
+            "build": "webpack",
+            "start": "webpack-dev-server",        // もしくは"webpack serve"でも同様に実行可能
+        },
+    ・ターミナルで「npm run start」を実行
+    ・publicフォルダを作成し、その中に静的ファイル(html, css)を格納する
+    ・webpack.config.js内のoutputにpublic pathを追記する
+        const path = require('path');
+
+        module.exports = {
+            entry: './dist/main.js',
+            output: {
+                filename: '[contenthash]bundle.js',
+                path: path.resolve(__dirname + 'dist'),
+                publicPath: '/dist/'
+            }
+        }
+    ・ソースを変更した上で保存すると、ブラウザに自動的に変更が反映される　(ホットモジュールリプレイスメント)
+
+[147. 本番用の設定でwebpackを使う]
+        const path = require('path');
+
+        module.exports = {
+            mode: 'production',   // production:本番 or development:開発
+            entry: './dist/main.js',
+            output: {
+                filename: '[contenthash]bundle.js',
+                path: path.resolve(__dirname + 'dist'),
+                publicPath: '/dist/'
+            }
+        }
+    ・上のやり方だといちいちmodeの設定を書き換えないといけない為、面倒。
+    　->設定ファイルを本番・開発用に２つ作成して切り替えることが可能
+        ①webpack.prod.js
+        ②webpack.dev.js
+            ・package.jsonを書き換える
+                "scripts" {
+                    "test": "echo \"Error: no test specified\" && exit ....",
+                    "build": "webpack --config webpack.prod.js",
+                    "start": "webpack --config webpack.dev.js",
+                },
+
+    ・本番用でよく使われる設定
+        ・CleanWebpackPlugin
+            ・・・Webpackによるビルド（コンパイル）処理の前に、出力先フォルダ（通常はdistなど）の中身をきれいに削除（クリーン）してくれるWebpackプラグインです。
+            ・ターミナルでインストールする
+                npm install --save-dev clean-webpack-plugin
+            ・設定ファイル内に記述する
+                const path = require('path');
+                const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+                module.exports = {
+                    mode: 'production',
+                    ・・・
+                },
+                ・・・
+                plugins: [
+                    new CleanWebpackPlugin()
+                ]
+
+

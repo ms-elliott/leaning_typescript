@@ -1,0 +1,81 @@
+JavaScriptのライブラリをTypeScriptで使う
+[150. d.ts  型提携ファイル]
+    ・ターミナルでaxiosをインストールする
+        npm install axios
+    ・tsconfig.json > "moduleResolution": "bundler", のコメントを外す
+        import ~ from 'パッケージ名'の場合、nodemodulesのフォルダ配下を探す様になる
+    ・エントリーファイル内に下記を記述する
+        import axios from 'axios';
+    ・xxx.d.ts  ・・・declaration/定義ファイル
+        もしライブラリーを自分で作成したい場合は、tsconfig.json内の"decralation": true, のコメントアウトを外すだけで、d.tsファイルが自動的に生成される
+    ・ライブラリーをimportした際に、tsは自動的にnode_module > axios > xxx.d.tsファイルを読み込む
+
+[151. DefinitelyTypedの@Typeパッケージをインストールして、既存の型定義ファイルを使う]
+    d.tsがないライブラリの場合
+        ・lodashをインストールする
+            npm install lodash
+        ・エントリーファイルに下記を記述
+            import _ from 'lodash';　　  <- エラーになる
+        ・解決方法
+            誰かが型定義ファイルを作成していないか調べる
+                ・Googleで　types lodash　で調べる
+                    @types/lodashがあれば型定義ファイルが存在する
+                ・@typesをインストールする
+                    npm install --save-dev @types/lodash
+                ・d.tsが含まれている為、エラーが消える
+
+[152. CDNなどでScriptから直接読み込んだライブラリーに型を定義する]
+    ・ネットでライブラリーを検索し、CDNをコピーする
+    ・HTMLのheadタグ内にペーストし、ライブラリを読み込む
+        <script src="https://cdn......js"></script>
+    ・手動で型を定義する
+        ・型定義ファイルのチェックをスキップする様に設定
+            tsconfig.json > compileOptions に "skipLibCheck": true, を記述
+        ・.tsファイルに型定義を記述する
+            declare const _: {
+                shuffle<T>(array: T[]): T[]
+            }
+            // 関数の場合
+            declare function _(): void
+            // クラスの場合
+            declare class _{
+                name: string
+                constructor()
+                greeting(): void
+            }
+        ・エラーなく使用できる様になる
+            console.log(_.shuffle([1, 2, 3, 4]));
+
+[153. アンビエントモジュール宣言　モジュール拡張]
+    ・npmでライブラリをインストールする(例：npm install lodash)
+    ・import文で読み込む際に型をつける
+        ・全く同じ記述(syntax)で、アンビエントモジュール宣言またはモジュール拡張となる
+        ・実行環境がscriptの場合にアンビエントモジュール宣言が使われ、moduleの場合にモジュール拡張が使われる
+        // library.ts
+        import _ from 'lodash';
+        console.log(_.shuffle([1, 2, 3, 4]));
+
+        // lodash.ts     ・・・import文は書かずにscriptとして実行する
+        declare module 'lodash' {
+            export function shuffle<T>(array: T[]): T[]
+            export const hello: 'hello'
+        }
+    ・型検査を行う必要があるので、tsconfig.jsonのfilesに追記する
+        "files": {
+            "./src/library.ts",
+            "./src/lodash.ts"
+        }
+
+    ・モジュール拡張を追加する
+        // library.ts
+        import {apple} from 'axios';
+        declare module 'axios' {
+            export const apple: 'apple'
+        }
+        axios.apple
+
+[154. トリプルスラッシュディレクティブ(/// <reference />)  types ]
+    ・型検査の対象にする為に、ファイル(library.ts)の先頭に下記を記述する
+    /// <reference path="./lodash.ts" />
+
+    トリプルスラッシュディレクティブ・・・ｓ少し古い書き方だが、使用可能
